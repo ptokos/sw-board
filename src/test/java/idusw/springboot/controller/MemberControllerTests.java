@@ -23,6 +23,10 @@ public class MemberControllerTests {
 
     @Test
     @Transactional  // could not initialize proxy - no Session : Lazy fetch 로 인한 오류
+    // Lazy fetch - 스프링에서는 fetch를 최대한 늦게함
+    // 쿼리를 연속적으로 할 때 순서가 꼬이면 오류 발생
+    // -> 트랜잭션(함께 처리해야할 단위), ex) 은행 -  개인계좌에서 출금하면 은행에서도 동시에 출금수행
+
     void readMember() { // seq를 사용해야 함
         Member member = new Member();
         member.setSeq(51L);
@@ -50,7 +54,7 @@ public class MemberControllerTests {
         IntStream.rangeClosed(1, 33).forEach(i -> {
             MemberEntity member = MemberEntity.builder()
                     .seq(Long.valueOf(i))
-                    .email("email" + i + "@induk.ac.kr")
+                    .email("e" + i + "@induk.ac.kr") // 17039
                     .pw("pw" + i)
                     .name("name" + i)
                     .build();

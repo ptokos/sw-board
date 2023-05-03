@@ -40,7 +40,8 @@ public class MemberController {
         session.invalidate();
         return "redirect:/";
     }
-    @GetMapping(value = {"", "/"})
+
+    @GetMapping(value = { ""})
     public String listMember(Model model) {
         List<Member> result = null;
         if((result = memberService.readList()) != null) {
@@ -50,6 +51,17 @@ public class MemberController {
         else
             return "/errors/404";
     }
+    @GetMapping(value = { "/list"})
+    public String list2Member(Model model) {
+        List<Member> result = null;
+        if((result = memberService.readList()) != null) {
+            model.addAttribute("list", result);
+            return "/members/list2";
+        }
+        else
+            return "/errors/404";
+    }
+
     @GetMapping("/register-form")
     public String getRegisterForm(Model model) { // form 요청 -> view (template engine)
         model.addAttribute("member", Member.builder().build());
