@@ -1,12 +1,19 @@
 package idusw.springboot.service;
 
 import idusw.springboot.domain.Member;
+import idusw.springboot.domain.PageRequestDTO;
+import idusw.springboot.domain.PageResultDTO;
 import idusw.springboot.entity.MemberEntity;
 import idusw.springboot.repository.MemberRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
+
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -98,6 +105,16 @@ public class MemberServiceImpl implements MemberService {
             result.setName(e.getName());
         }
         return result;
+    }
+
+    @Override
+    public PageResultDTO<Member, MemberEntity> getList(PageRequestDTO requestDTO) {
+        Pageable pageable = requestDTO.getPageable(Sort.by("seq").ascending());
+
+        Page<MemberEntity> result = memberRepository.findAll(pageable);
+        Function<MemberEntity, Member> fn = (entity -> entityToDto(entity));
+
+        return new PageResultDTO<>(result, fn);
     }
 
 }
