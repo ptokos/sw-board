@@ -168,6 +168,31 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
+                                <form th:action="@{'/members'}" th:method="get">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-6">
+                                            <div class="dataTables_length" id="dataTable_length">
+                                                <label>검색 요건
+                                                    <select name="type" aria-controls="dataTable" class="custom-select custom-select-sm form-control form-control-sm">
+                                                        <option value="e">email</option>
+                                                        <option value="n">name</option>
+                                                        <option value="en">email+name</option>
+                                                    </select>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 col-md-6">
+                                            <div id="dataTable_filter" class="dataTables_filter">
+                                                <label>검색어:
+                                                    <input type="text" name="keyword" class="form-control form-control-sm" placeholder="" aria-controls="dataTable">
+                                                </label>
+                                                <button type="submit" class="btn btn-default">
+                                                    <i class="fas fa-search"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
@@ -201,19 +226,24 @@
                                         </tr>
                                     </tbody>
                                 </table>
-<!--                                <ul>-->
-<!--                                    <li th:if="${result.prev}">-->
-<!--                                        <a th:href="@{}">prev</a>-->
-<!--                                    </li>-->
-<!--                                    <li th:class="'page-item' + ${result.page == page? 'active':''}"-->
-<!--                                        th:each="page : ${result.pageList}">-->
-<!--                                        <a th:href="@{}">[[${page}]]</a>-->
-<!--                                    </li>-->
-<!--                                    <li th:if="${result.next}">-->
-<!--                                        <a th:href="@{}">next</a>-->
-<!--                                    </li>-->
-
-<!--                                </ul>-->
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-5">
+                                        <div class="dataTables_info" id="dataTable_info" role="status" aria-live="polite">
+                                            <span th:text="${result.curPage}"></span> [[${result.totalPage}]] of [[${result.totalRows}]] entries
+                                        </div></div>
+                                    <div class="col-sm-12 col-md-7">
+                                        <div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
+                                            <ul class="pagination">
+                                                <li th:if="${result.prev}" th:class="'paginate_button page-item previous ' + ${result.prev?'':'disabled'}" id="dataTable_previous">
+                                                    <a href="#" th:href="@{/members(page=${result.start - 1}, perPage=${result.perPage})}" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">Previous</a></li>
+                                                <li th:class="'paginate_button page-item ' + ${result.curPage == page?'active':''}" th:each="page : ${result.pageList}">
+                                                    <a href="#" th:href="@{/members(page=${page}, perPage=${result.perPage})}" aria-controls="dataTable" data-dt-idx="1" tabindex="0" class="page-link">[[${page}]]</a></li>
+                                                <li th:if="${result.next}" th:class="'paginate_button page-item next ' + ${result.next?'':'disabled'} " id="dataTable_next">
+                                                    <a href="#" th:href="@{/members(page=${result.end + 1}, perPage=${result.perPage})}" aria-controls="dataTable" data-dt-idx="7" tabindex="0" class="page-link">Next</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -251,12 +281,12 @@
     <!-- Bootstrap core JavaScript-->
     <div th:replace="~{/main/main-fragment :: footer}"></div>
 
-    <!-- Page level plugins -->
-    <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+<!--    &lt;!&ndash; Page level plugins &ndash;&gt;-->
+<!--    <script src="/vendor/datatables/jquery.dataTables.min.js"></script>-->
+<!--    <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>-->
 
-    <!-- Page level custom scripts -->
-    <script src="/js/demo/datatables-demo.js"></script>
+<!--    &lt;!&ndash; Page level custom scripts &ndash;&gt;-->
+<!--    <script src="/js/demo/datatables-demo.js"></script>-->
 
 </body>
 

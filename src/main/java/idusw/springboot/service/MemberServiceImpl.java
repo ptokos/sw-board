@@ -112,7 +112,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public PageResultDTO<Member, MemberEntity> getList(PageRequestDTO requestDTO) {
-        Sort sort = Sort.by("seq").descending();
+        Sort sort = Sort.by("seq").descending(); //  .ascending();
 
         Pageable pageable = requestDTO.getPageable(sort);
 
@@ -138,10 +138,15 @@ public class MemberServiceImpl implements MemberService {
 
         String keyword = pageRequestDTO.getKeyword();
         BooleanBuilder conditionBuilder = new BooleanBuilder();
-        if(type.contains("e")) {
+        //select * from member where
+        // seq > 0
+        // email=keyword or name=keyword
+        // seq > 0 and email=keyword or name=keyword
+        //select * from member where seq > 0 and email=keyword or name = keyword
+        if(type.contains("e")) { // email 검색
             conditionBuilder.or(qMemberEntity.email.contains(keyword));
         }
-        if(type.contains("n")) {
+        if(type.contains("n")) { // name 검색
             conditionBuilder.or(qMemberEntity.name.contains(keyword));
         }
         booleanBuilder.and(conditionBuilder);
