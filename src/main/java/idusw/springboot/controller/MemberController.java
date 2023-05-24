@@ -54,14 +54,28 @@ public class MemberController {
         else
             return "/errors/404";
     }
-    @GetMapping(value = { "/list/{pn}/{size}"})
-    public String listMemberPagination(@PathVariable("pn") int pn, @PathVariable("size") int size, Model model) {
-        PageRequestDTO pageRequestDTO = PageRequestDTO.builder().page(pn).size(size).build();
+//    @GetMapping(value = { "/list/{pn}/{size}"})
+//    public String listMemberPagination(@PathVariable("pn") int pn, @PathVariable("size") int size, Model model) {
+
+    @GetMapping(value = {"", "/"})
+    public String listMemberPagination(@RequestParam(value="page", required = false, defaultValue = "1") int page,
+                                       @RequestParam(value="perPage", required = false, defaultValue = "10") int perPage,
+                                       @RequestParam(value="perPagination", required = false, defaultValue ="5") int perPagination,
+                                       @RequestParam(value="type", required = false, defaultValue ="e") String type,
+                                       @RequestParam(value="keyword", required = false, defaultValue ="@") String keyword,
+                                       Model model) {
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+                .page(page)
+                .perPage(perPage)
+                .perPagination(perPagination)
+                .type(type)
+                .keyword(keyword)
+                .build();
         PageResultDTO<Member, MemberEntity> resultDTO = memberService.getList(pageRequestDTO);
 
         if(resultDTO != null) {
-            model.addAttribute("list", resultDTO.getDtoList()); //record
-            model.addAttribute("pageList", resultDTO.getPageList()); //page number list
+
+            model.addAttribute("result", resultDTO); //page number list
             return "/members/list";
         }
         else
