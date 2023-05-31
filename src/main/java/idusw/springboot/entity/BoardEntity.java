@@ -11,7 +11,7 @@ import jakarta.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@ToString//(exclude = "writer")
+@ToString(exclude = "writer")
 public class BoardEntity extends BaseEntity {
 
     @Id

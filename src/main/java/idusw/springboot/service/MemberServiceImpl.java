@@ -137,6 +137,7 @@ public class MemberServiceImpl implements MemberService {
         }
 
         String keyword = pageRequestDTO.getKeyword();
+
         BooleanBuilder conditionBuilder = new BooleanBuilder();
         //select * from member where
         // seq > 0
@@ -144,7 +145,7 @@ public class MemberServiceImpl implements MemberService {
         // seq > 0 and email=keyword or name=keyword
         //select * from member where seq > 0 and email=keyword or name = keyword
         if(type.contains("e")) { // email 검색
-            conditionBuilder.or(qMemberEntity.email.contains(keyword));
+            conditionBuilder.or(qMemberEntity.email.contains(keyword));  //or 메소드를 불러오면 or가 조건에 붙는다 / 함수 호출관계로 접근 JPA
         }
         if(type.contains("n")) { // name 검색
             conditionBuilder.or(qMemberEntity.name.contains(keyword));
