@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Blog Post - Start Bootstrap Template</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="../css/styles.css" rel="stylesheet" />
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    </head>
+    <body>
+        <!-- Responsive navbar-->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="#!">Start Bootstrap</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#!">Contact</a></li>
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Blog</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- Page content-->
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-lg-8">
+                    <!-- Post content-->
+                    <article>
+                        <!-- Post header-->
+                        <header class="mb-4">
+                            <!-- Post title-->
+                            <h1 class="fw-bolder mb-1">Welcome to Blog Post!</h1>
+                            <!-- Post meta content-->
+                            <div class="text-muted fst-italic mb-2">Posted on January 1, 2023 by Start Bootstrap</div>
+                            <!-- Post categories-->
+                            <a class="badge bg-secondary text-decoration-none link-light" href="#!">Web Design</a>
+                            <a class="badge bg-secondary text-decoration-none link-light" href="#!">Freebies</a>
+                        </header>
+                        <!-- Preview image figure-->
+                        <figure class="mb-4"><img class="img-fluid rounded" src="https://dummyimage.com/900x400/ced4da/6c757d.jpg" alt="..." /></figure>
+                        <!-- Post content-->
+                        <section class="mb-5">
+                            <h2 class="fw-bolder mb-4 mt-5" th:text="${board.title}"></h2>
+                            <p class="fs-5 mb-4" th:text="${board.content}">
+                                For me, the most fascinating interface is Twitter.
+                                I have odd cosmic thoughts every day and I realized I could hold them to myself or share them with people who might be interested.</p>
+                            </section>
+                    </article>
+                    <!-- Comments section-->
+                    <section class="mb-5">
+                        <div class="mt-4">
+                            <h5 ><span class="badge badge-info btn-warning addReply ">Add Reply</span> </h5>
+                            <h5 ><span class="badge badge-secondary btn-warning replyCount"> Reply Count  [[${board.replyCount}]]</span> </h5>
+                        </div>
+
+                        <button type="button" class="badge badge-secondary btn-warning replyCount">
+                            Reply Count <span class="badge badge-light">[[${board.replyCount}]]</span>
+                        </button>
+
+                        <button type="button" class="badge badge-info btn-warning addReply">
+                            Reply Register
+                        </button>
+                        <div class="list-group replyList">
+
+                        </div>
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <!-- Comment form-->
+                                <form class="mb-4">
+                                    <textarea class="form-control" rows="3" placeholder="Join the discussion and leave a comment!"></textarea>
+                                </form>
+
+                                <div class="modal" tabindex="-1" role="dialog">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Modal title</h5>
+
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <input class="form-control"  type="text" name="reply-text" placeholder="Reply Text...">
+                                                </div>
+                                                <div class="form-group">
+                                                    <input class="form-control"  type="text" name="replier" placeholder="Replier">
+                                                    <input type="hidden" name="rno" >
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-danger replyRemove">Remove</button>
+                                                <button type="button" class="btn btn-warning replyModify">Modify</button>
+                                                <button type="button" class="btn btn-primary replySave">Save</button>
+                                                <button type="button" class="btn btn-outline-secondary replyClose" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <script>
+                                    $(document).ready(function(e) {
+
+                                        var bno = [[${board.bno}]];
+                                        //댓글이 추가될 영역
+                                        var listGroup  = $(".replyList");
+
+                                        //function getReplies() {
+                                        //날짜 처리를 위한 함수
+                                        function formatTime(str){
+                                            var date = new Date(str);
+                                            return date.getFullYear() + '/' +
+                                                (date.getMonth() + 1) + '/' +
+                                                date.getDate() + ' ' +
+                                                date.getHours() + ':' +
+                                                date.getMinutes();
+                                        }
+
+                                        //특정한 게시글의 댓글을 처리하는 함수
+                                        function loadJSONData() {
+                                            $.getJSON('/replies/boards/'+bno, function(arr){
+
+                                                console.log(arr);
+
+                                                var str ="";
+
+                                                $('.replyCount').html(" Reply Count  " + arr.length);
+
+                                                $.each(arr, function(idx, reply){
+                                                    console.log(reply);
+                                                    str += '    <div class="card-body" data-rno="'+reply.rno+'"><b>'+reply.rno +'</b>';
+                                                    str += '    <h5 class="card-title">'+reply.text+'</h5>';
+                                                    str += '    <h6 class="card-subtitle mb-2 text-muted">'+reply.replier+'</h6>';
+                                                    str += '    <p class="card-text">'+ formatTime(reply.regDate) +'</p>';
+                                                    str += '    </div>';
+                                                })
+                                                listGroup.html(str);
+                                            });
+                                        }
+
+                                        loadJSONData();
+                                        //$(".replyCount").click(function(){
+                                        //    loadJSONData();
+                                        //})//end click
+
+                                        //모달 창
+                                        var modal = $('.modal');
+
+                                        $(".addReply").click(function () {
+                                            modal.modal('show');
+
+                                            //댓글 입력하는 부분 초기화 시키기
+                                            $('input[name="reply-text"]').val('');
+                                            $('input[name="replyer"]').val('');
+
+                                            $(".modal-footer .btn").hide(); //모달 내의 모든 버튼을 안 보이도록
+                                            $(".replySave, .replyClose").show(); //필요한 버튼들만 보이도록
+
+                                        });
+
+                                        $(".replySave").click(function() {
+                                            var reply = {
+                                                bno: bno,
+                                                text: $('input[name="reply-text"]').val(),
+                                                replier: $('input[name="replier"]').val()
+                                            }
+                                            console.log(reply);
+                                            $.ajax({
+                                                url: '/replies/',
+                                                method: 'post',
+                                                data:  JSON.stringify(reply),
+                                                contentType: 'application/json; charset=utf-8',
+                                                dataType: 'json',
+                                                success: function(data){
+                                                    console.log(data);
+                                                    alert(newRno +"번 댓글이 등록되었습니다.")
+                                                    self.location.reload();
+                                                }
+                                            })
+                                            modal.modal('hide');
+                                            //loadJSONData();
+                                        });
+
+                                        $('.replyList').on("click", ".card-body", function(){
+
+                                            var rno = $(this).data("rno");
+
+                                            $("input[name='replyText']").val( $(this).find('.card-title').html());
+                                            $("input[name='replieer']").val( $(this).find('.card-subtitle').html());
+                                            $("input[name='rno']").val(rno);
+
+                                            $(".modal-footer .btn").hide();
+                                            $(".replyRemove, .replyModify, .replyClose").show();
+
+                                            modal.modal('show');
+
+                                        });
+
+                                        $(".replyRemove").on("click", function(){
+
+                                            var rno = $("input[name='rno']").val(); //모달 창에 보이는 댓글 번호 hidden처리되어 있음
+
+                                            $.ajax({
+                                                url: '/replies/' + rno,
+                                                method: 'delete',
+
+                                                success: function(result){
+                                                    console.log("result: " + result);
+                                                    if(result ==='success'){
+                                                        alert("댓글이 삭제되었습니다");
+                                                        self.location.reload();
+                                                    }
+                                                }
+                                            })
+                                            modal.modal('hide');
+                                            loadJSONData();
+                                        });
+
+                                        $(".replyModify").click(function() {
+                                            var rno = $("input[name='rno']").val();
+
+                                            var reply = {
+                                                rno: rno,
+                                                bno: bno,
+                                                text: $('input[name="replyText"]').val(),
+                                                replyer: $('input[name="replier"]').val()
+                                            }
+
+                                            console.log(reply);
+                                            $.ajax({
+                                                url: '/replies/' + rno,
+                                                method: 'put',
+                                                data:  JSON.stringify(reply),
+                                                contentType: 'application/json; charset=utf-8',
+                                                success: function(result){
+                                                    console.log("RESULT: " + result);
+                                                    if(result ==='success'){
+                                                        alert("댓글이 수정되었습니다");
+                                                        self.location.reload();
+                                                    }
+                                                }
+                                            });
+                                            modal.modal('hide');
+                                        });
+                                    });
+                                </script>
+                                <!-- Single comment-->
+                                <div class="d-flex">
+                                    <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
+                                    <div class="ms-3">
+                                        <div class="fw-bold">Commenter Name</div>
+                                        When I look at the universe and all the ways the universe wants to kill us, I find it hard to reconcile that with statements of beneficence.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <!-- Side widgets-->
+                <div class="col-lg-4">
+                    <!-- Search widget-->
+                    <div class="card mb-4">
+                        <div class="card-header">Search</div>
+                        <div class="card-body">
+                            <div class="input-group">
+                                <input class="form-control" type="text" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search" />
+                                <button class="btn btn-primary" id="button-search" type="button">Go!</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Categories widget-->
+                    <div class="card mb-4">
+                        <div class="card-header">Categories</div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <ul class="list-unstyled mb-0">
+                                        <li><a href="#!">Web Design</a></li>
+                                        <li><a href="#!">HTML</a></li>
+                                        <li><a href="#!">Freebies</a></li>
+                                    </ul>
+                                </div>
+                                <div class="col-sm-6">
+                                    <ul class="list-unstyled mb-0">
+                                        <li><a href="#!">JavaScript</a></li>
+                                        <li><a href="#!">CSS</a></li>
+                                        <li><a href="#!">Tutorials</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Side widget-->
+                    <div class="card mb-4">
+                        <div class="card-header">Side Widget</div>
+                        <div class="card-body">You can put anything you want inside of these side widgets. They are easy to use, and feature the Bootstrap 5 card component!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer-->
+        <footer class="py-5 bg-dark">
+            <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p></div>
+        </footer>
+
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+
+
+    </body>
+</html>

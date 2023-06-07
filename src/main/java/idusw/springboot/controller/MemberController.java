@@ -32,11 +32,12 @@ public class MemberController {
         Member result = null;
         if((result = memberService.login(member)) != null ) { // 정상적으로 레코드의 변화가 발생하는 경우 영향받는 레코드 수를 반환
             session = request.getSession();
+            System.out.println("login");
             session.setAttribute("mb", result);
             return "redirect:/";
         }
         else
-            return "/main/error";
+            return "/errors/404";
     }
     @GetMapping("/logout")
     public String logoutMember() {

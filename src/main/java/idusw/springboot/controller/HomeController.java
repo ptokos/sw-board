@@ -13,6 +13,6 @@ public class HomeController {
     */
     @GetMapping
     public String goHome() {
-        return "/main/index";
+        return "redirect:/boards";
     }
 }

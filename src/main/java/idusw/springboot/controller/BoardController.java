@@ -28,18 +28,15 @@ public class BoardController {
     */
 
     @GetMapping("/reg-form")
-    public String getRegForm(PageRequestDTO pageRequestDTO, Model model, HttpServletRequest request) {
+    public String getRegForm(Model model, HttpServletRequest request) {
         session = request.getSession();
         Member member = (Member) session.getAttribute("mb");
         if (member != null) {
             model.addAttribute("board", Board.builder().build());
-            //System.out.println(member.getEmail());
-            //model.addAttribute("member", Member.builder().build());
-            return "/boards/reg-form";
+            return "/boards/reg-form"; // view
         } else
             return "redirect:/members/login-form"; // 로그인이 안된 상태인 경우
     }
-
 
 
     @PostMapping("/")
@@ -47,31 +44,28 @@ public class BoardController {
         if (boardService.registerBoard(board) > 0) // 정상적으로 레코드의 변화가 발생하는 경우 영향받는 레코드 수를 반환
             return "redirect:/boards";
         else
-            return "/errors/404"; // 게시물 등록 예외 처리
+            return "errors/404"; // 게시물 등록 예외 처리
     }
 
     @PostMapping("")
-    public String postBoard(@ModelAttribute("board") Board dto, Model model,  HttpServletRequest request) {
+    public String postBoard(@ModelAttribute("board") Board dto, Model model, HttpServletRequest request) {
         session = request.getSession();
         Member member = (Member) session.getAttribute("mb");
-      //  System.out.println(dto.getTitle() + ":" + dto.getContent());
-        dto.setWriterSeq(member.getSeq());
-        dto.setWriterEmail(member.getEmail());
-        dto.setWriterName(member.getName());
+        if(member != null) {
+            // form에서 hidden 전송하는 방식으로 변경
+            dto.setWriterSeq(member.getSeq());
+            dto.setWriterEmail(member.getEmail());
+            dto.setWriterName(member.getName());
 
-        // login 처리하면 그냥 관계 없음
-        /*
-        Long seqLong = Long.valueOf(new Random().nextInt(50));
-        seqLong = (seqLong == 0) ? 1L : seqLong;
-        dto.setWriterSeq(seqLong);
-         */
-        Long bno = Long.valueOf(boardService.registerBoard(dto));
+            Long bno = Long.valueOf(boardService.registerBoard(dto));
 
-        return "redirect:/boards/" + bno; // 등록 후 상세 보기
+            return "redirect:/boards"; // 등록 후 목록 보기, redirection, get method
+        }else
+            return "redirect:/members/login-form"; // 로그인이 안된 상태인 경우
     }
 
     @GetMapping("")
-    public String getBoards(PageRequestDTO pageRequestDTO, Model model) {
+    public String getBoards(PageRequestDTO pageRequestDTO, Model model) {  // 중간 본 수정
         model.addAttribute("list", boardService.findBoardAll(pageRequestDTO));
         return "/boards/list";
     }
@@ -82,7 +76,7 @@ public class BoardController {
         Board board = boardService.findBoardById(Board.builder().bno(bno).build());
         boardService.updateBoard(board);
         model.addAttribute("dto", boardService.findBoardById(board));
-        return "/boards/read";
+        return "/boards/detail";
     }
 
     @GetMapping("/{bno}/up-form")
