@@ -20,7 +20,7 @@ public class PageRequestDTO {
 
     public PageRequestDTO() {
         this.page = 1;
-        this.perPage = 10;
+        this.perPage = 8;
         this.perPagination = 5;
     }
     public Pageable getPageable(Sort sort) {

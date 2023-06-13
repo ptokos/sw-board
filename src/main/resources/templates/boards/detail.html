@@ -37,9 +37,9 @@
                         <!-- Post header-->
                         <header class="mb-4">
                             <!-- Post title-->
-                            <h1 class="fw-bolder mb-1">Welcome to Blog Post!</h1>
+                            <h1 class="fw-bolder mb-1">[[${board.title}]]</h1>
                             <!-- Post meta content-->
-                            <div class="text-muted fst-italic mb-2">Posted on January 1, 2023 by Start Bootstrap</div>
+                            <div class="text-muted fst-italic mb-2">Posted on [[${board.regDate}]] by [[${board.writerEmail}]]</div>
                             <!-- Post categories-->
                             <a class="badge bg-secondary text-decoration-none link-light" href="#!">Web Design</a>
                             <a class="badge bg-secondary text-decoration-none link-light" href="#!">Freebies</a>
@@ -48,27 +48,19 @@
                         <figure class="mb-4"><img class="img-fluid rounded" src="https://dummyimage.com/900x400/ced4da/6c757d.jpg" alt="..." /></figure>
                         <!-- Post content-->
                         <section class="mb-5">
-                            <h2 class="fw-bolder mb-4 mt-5" th:text="${board.title}"></h2>
-                            <p class="fs-5 mb-4" th:text="${board.content}">
-                                For me, the most fascinating interface is Twitter.
-                                I have odd cosmic thoughts every day and I realized I could hold them to myself or share them with people who might be interested.</p>
-                            </section>
+                            <h2 class="fw-bolder mb-4 mt-5">Content</h2>
+                            <p class="fs-5 mb-4" th:text="${board.content}"></p>
+                        </section>
                     </article>
                     <!-- Comments section-->
                     <section class="mb-5">
-                        <div class="mt-4">
-                            <h5 ><span class="badge badge-info btn-warning addReply ">Add Reply</span> </h5>
-                            <h5 ><span class="badge badge-secondary btn-warning replyCount"> Reply Count  [[${board.replyCount}]]</span> </h5>
-                        </div>
-
-                        <button type="button" class="badge badge-secondary btn-warning replyCount">
+                        <button type="button" class="badge bg-secondary btn-warning reply-count">
                             Reply Count <span class="badge badge-light">[[${board.replyCount}]]</span>
                         </button>
-
-                        <button type="button" class="badge badge-info btn-warning addReply">
+                        <button type="button" class="badge bg-secondary addReply">
                             Reply Register
                         </button>
-                        <div class="list-group replyList">
+                        <div class="list-group reply-list">
 
                         </div>
                         <div class="card bg-light">
@@ -82,9 +74,9 @@
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title">Modal title</h5>
+                                                <h5 class="modal-title">Reply</h5>
 
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <button type="button" class="close btn-reply-close" data-dismiss="modal" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
@@ -98,10 +90,10 @@
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-danger replyRemove">Remove</button>
-                                                <button type="button" class="btn btn-warning replyModify">Modify</button>
-                                                <button type="button" class="btn btn-primary replySave">Save</button>
-                                                <button type="button" class="btn btn-outline-secondary replyClose" data-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-danger btn-reply-remove">Remove</button>
+                                                <button type="button" class="btn btn-warning btn-reply-modify">Modify</button>
+                                                <button type="button" class="btn btn-primary btn-reply-save">Save</button>
+                                                <button type="button" class="btn btn-outline-secondary btn-reply-close" data-dismiss="modal">Close</button>
                                             </div>
                                         </div>
                                     </div>
@@ -109,14 +101,14 @@
 
                                 <script>
                                     $(document).ready(function(e) {
-
                                         var bno = [[${board.bno}]];
                                         //댓글이 추가될 영역
-                                        var listGroup  = $(".replyList");
+                                        var listGroup  = $(".reply-list");
+                                        //모달 창
+                                        var modal = $('.modal');
 
-                                        //function getReplies() {
                                         //날짜 처리를 위한 함수
-                                        function formatTime(str){
+                                        function formatTime(str) {
                                             var date = new Date(str);
                                             return date.getFullYear() + '/' +
                                                 (date.getMonth() + 1) + '/' +
@@ -127,47 +119,36 @@
 
                                         //특정한 게시글의 댓글을 처리하는 함수
                                         function loadJSONData() {
-                                            $.getJSON('/replies/boards/'+bno, function(arr){
-
+                                            $.getJSON('/replies/boards/' + bno, function (arr) {
                                                 console.log(arr);
-
-                                                var str ="";
-
-                                                $('.replyCount').html(" Reply Count  " + arr.length);
-
-                                                $.each(arr, function(idx, reply){
+                                                var str = "";
+                                                $('.reply-count').html(" Reply Count  " + arr.length);
+                                                $.each(arr, function (idx, reply) {
                                                     console.log(reply);
-                                                    str += '    <div class="card-body" data-rno="'+reply.rno+'"><b>'+reply.rno +'</b>';
-                                                    str += '    <h5 class="card-title">'+reply.text+'</h5>';
-                                                    str += '    <h6 class="card-subtitle mb-2 text-muted">'+reply.replier+'</h6>';
-                                                    str += '    <p class="card-text">'+ formatTime(reply.regDate) +'</p>';
-                                                    str += '    </div>';
+                                                    str += '    <div class="card-body" data-rno="' + reply.replier + '"><b>' + reply.replier + '</b>';
+                                                    str += '    <h5 class="card-title">' + reply.text + '</h5>';
+                                                    str += '    <h6 class="card-subtitle mb-2 text-muted">' + 'Post on ' + formatTime(reply.regDate) + ' by ' + reply.replier + '</h6>';
+                                                    str += '    </div><hr>';
                                                 })
                                                 listGroup.html(str);
                                             });
                                         }
 
                                         loadJSONData();
-                                        //$(".replyCount").click(function(){
+                                        //$(".reply-count").click(function(){
                                         //    loadJSONData();
                                         //})//end click
 
-                                        //모달 창
-                                        var modal = $('.modal');
-
                                         $(".addReply").click(function () {
                                             modal.modal('show');
-
                                             //댓글 입력하는 부분 초기화 시키기
                                             $('input[name="reply-text"]').val('');
-                                            $('input[name="replyer"]').val('');
-
+                                            $('input[name="replyier"]').val('');
                                             $(".modal-footer .btn").hide(); //모달 내의 모든 버튼을 안 보이도록
-                                            $(".replySave, .replyClose").show(); //필요한 버튼들만 보이도록
-
+                                            $(".btn-reply-save, .btn-reply-close").show(); //필요한 버튼들만 보이도록
                                         });
 
-                                        $(".replySave").click(function() {
+                                        $(".btn-reply-save").click(function() {
                                             var reply = {
                                                 bno: bno,
                                                 text: $('input[name="reply-text"]').val(),
@@ -183,58 +164,50 @@
                                                 success: function(data){
                                                     console.log(data);
                                                     alert(newRno +"번 댓글이 등록되었습니다.")
-                                                    self.location.reload();
                                                 }
                                             })
                                             modal.modal('hide');
-                                            //loadJSONData();
+                                            self.location.reload();
                                         });
 
-                                        $('.replyList').on("click", ".card-body", function(){
-
+                                        $('.reply-list').on("click", ".card-body", function() {
                                             var rno = $(this).data("rno");
 
-                                            $("input[name='replyText']").val( $(this).find('.card-title').html());
-                                            $("input[name='replieer']").val( $(this).find('.card-subtitle').html());
+                                            $("input[name='reply-text']").val( $(this).find('.card-title').html());
+                                            $("input[name='replier']").val( $(this).find('.card-subtitle').html());
                                             $("input[name='rno']").val(rno);
 
                                             $(".modal-footer .btn").hide();
-                                            $(".replyRemove, .replyModify, .replyClose").show();
+                                            $(".btn-reply-remove, .btn-reply-modify, .btn-reply-close").show();
 
                                             modal.modal('show');
-
                                         });
 
-                                        $(".replyRemove").on("click", function(){
-
+                                        $(".btn-reply-remove").on("click", function(){
                                             var rno = $("input[name='rno']").val(); //모달 창에 보이는 댓글 번호 hidden처리되어 있음
-
                                             $.ajax({
                                                 url: '/replies/' + rno,
                                                 method: 'delete',
-
                                                 success: function(result){
                                                     console.log("result: " + result);
                                                     if(result ==='success'){
                                                         alert("댓글이 삭제되었습니다");
-                                                        self.location.reload();
                                                     }
                                                 }
                                             })
                                             modal.modal('hide');
-                                            loadJSONData();
+                                            self.location.reload();
                                         });
 
-                                        $(".replyModify").click(function() {
+                                        $(".btn-reply-modify").click(function() {
                                             var rno = $("input[name='rno']").val();
 
                                             var reply = {
                                                 rno: rno,
                                                 bno: bno,
-                                                text: $('input[name="replyText"]').val(),
-                                                replyer: $('input[name="replier"]').val()
+                                                text: $('input[name="reply-text"]').val(),
+                                                replier: $('input[name="replier"]').val()
                                             }
-
                                             console.log(reply);
                                             $.ajax({
                                                 url: '/replies/' + rno,
@@ -245,11 +218,16 @@
                                                     console.log("RESULT: " + result);
                                                     if(result ==='success'){
                                                         alert("댓글이 수정되었습니다");
-                                                        self.location.reload();
                                                     }
                                                 }
                                             });
                                             modal.modal('hide');
+                                            self.location.reload();
+                                        });
+
+                                        $(".btn-reply-close").click(function() {
+                                            modal.modal('hide');
+                                            self.location.reload();
                                         });
                                     });
                                 </script>

@@ -20,13 +20,9 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 @Service
 public class BoardServiceImpl implements BoardService {
-    private BoardRepository boardRepository;
-    private ReplyRepository replyRepository;
+    private final BoardRepository boardRepository;
+    private final ReplyRepository replyRepository;
 
-    public BoardServiceImpl(BoardRepository boardRepository) {
-        this.boardRepository = boardRepository;
-
-    }
 
     @Override
     public int registerBoard(Board board) {

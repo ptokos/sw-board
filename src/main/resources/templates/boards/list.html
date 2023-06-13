@@ -19,10 +19,10 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
-                <li class="nav-item"><a class="nav-link" href="#!">Contact</a></li>
-                <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Blog</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{'/boards'}">board</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{'/members/login-form'}">login</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{'/boards/reg-form'}">register</a></li>
+<!--                <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Blog</a></li>-->
             </ul>
         </div>
     </div>
@@ -52,16 +52,16 @@
                 <input type="text" name="keyword" th:value="${pageRequestDTO.keyword}"/>
                 <input type="submit" value="search"/>
             </form>
-            <!-- Featured blog post-->
-            <div class="card mb-4">
-                <a href="#!"><img class="card-img-top" src="https://dummyimage.com/850x350/dee2e6/6c757d.jpg" alt="..." /></a>
-                <div class="card-body">
-                    <div class="small text-muted">January 1, 2023</div>
-                    <h2 class="card-title">Featured Post Title</h2>
-                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p>
-                    <a class="btn btn-primary" href="#!">Read more →</a>
-                </div>
-            </div>
+<!--            &lt;!&ndash; Featured blog post&ndash;&gt;-->
+<!--            <div class="card mb-4">-->
+<!--                <a href="#!"><img class="card-img-top" src="https://dummyimage.com/850x350/dee2e6/6c757d.jpg" alt="..." /></a>-->
+<!--                <div class="card-body">-->
+<!--                    <div class="small text-muted">January 1, 2023</div>-->
+<!--                    <h2 class="card-title">Featured Post Title</h2>-->
+<!--                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p>-->
+<!--                    <a class="btn btn-primary" href="#!">Read more →</a>-->
+<!--                </div>-->
+<!--            </div>-->
             <!-- Nested row for non-featured blog posts-->
             <div class="row">
                 <div class="col-lg-6">
@@ -78,17 +78,26 @@
                 </div>
             </div>
             <!-- Pagination-->
+
             <nav aria-label="Pagination">
                 <hr class="my-0" />
-                <ul class="pagination justify-content-center my-4">
-                    <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Newer</a></li>
-                    <li class="page-item active" aria-current="page"><a class="page-link" href="#!">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#!">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#!">3</a></li>
-                    <li class="page-item disabled"><a class="page-link" href="#!">...</a></li>
-                    <li class="page-item"><a class="page-link" href="#!">15</a></li>
-                    <li class="page-item"><a class="page-link" href="#!">Older</a></li>
+                <ul class="pagination">
+                    <li th:if="${list.prev}" th:class="'paginate_button page-item previous ' + ${list.prev?'':'disabled'}" id="dataTable_previous">
+                        <a href="#" th:href="@{/boards(page=${list.start - 1}, perPage=${list.perPage})}" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">Previous</a></li>
+                    <li th:class="'paginate_button page-item ' + ${list.curPage == page?'active':''}" th:each="page : ${list.pageList}">
+                        <a href="#" th:href="@{/boards(page=${page}, perPage=${list.perPage})}" aria-controls="dataTable" data-dt-idx="1" tabindex="0" class="page-link">[[${page}]]</a></li>
+                    <li th:if="${list.next}" th:class="'paginate_button page-item next ' + ${list.next?'':'disabled'} " id="dataTable_next">
+                        <a href="#" th:href="@{/boards(page=${list.end + 1}, perPage=${list.perPage})}" aria-controls="dataTable" data-dt-idx="7" tabindex="0" class="page-link">Next</a></li>
                 </ul>
+<!--                <ul class="pagination justify-content-center my-4">-->
+<!--                    <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Newer</a></li>-->
+<!--                    <li class="page-item active" aria-current="page"><a class="page-link" href="#!">1</a></li>-->
+<!--                    <li class="page-item"><a class="page-link" href="#!">2</a></li>-->
+<!--                    <li class="page-item"><a class="page-link" href="#!">3</a></li>-->
+<!--                    <li class="page-item disabled"><a class="page-link" href="#!">...</a></li>-->
+<!--                    <li class="page-item"><a class="page-link" href="#!">15</a></li>-->
+<!--                    <li class="page-item"><a class="page-link" href="#!">Older</a></li>-->
+<!--                </ul>-->
             </nav>
         </div>
         <!-- Side widgets-->

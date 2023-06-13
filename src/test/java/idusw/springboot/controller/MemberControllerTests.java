@@ -3,8 +3,10 @@ package idusw.springboot.controller;
 import idusw.springboot.domain.Member;
 import idusw.springboot.domain.PageRequestDTO;
 import idusw.springboot.domain.PageResultDTO;
+import idusw.springboot.entity.BoardEntity;
 import idusw.springboot.entity.MemberEntity;
 import idusw.springboot.repository.MemberRepository;
+import idusw.springboot.repository.BoardRepository;
 import idusw.springboot.service.MemberService;
 import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
@@ -63,6 +65,20 @@ public class MemberControllerTests {
             memberRepository.save(member);
         });
     }
+//
+//    @Test
+//    void initializeBoard() {
+//        // Integer 데이터 흐름, Lambda 식 - 함수형 언어의 특징을 활용
+//        IntStream.rangeClosed(1, 20).forEach(i -> {
+//            BoardEntity board = BoardEntity.builder()
+//                    .bno(Long.valueOf(i))
+//                    .title("제목" + i) // 17039
+//                    .content("내용" + i)
+//                    .writer("e1@induk.ac.kr")
+//                    .build();
+//            BoardRepository.save(board);
+//        });
+//    }
 
     @Test
     void createMember() {

@@ -4,7 +4,7 @@ import lombok.*;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "b201712039")
+@Table(name = "b201712039_board")
 
 
 @Builder

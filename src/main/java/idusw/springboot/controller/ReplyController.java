@@ -1,7 +1,6 @@
 package idusw.springboot.controller;
 
 import idusw.springboot.domain.Reply;
-import idusw.springboot.entity.ReplyEntity;
 import idusw.springboot.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -16,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/replies/")
 @Log4j2
-public class RelpyController {
+public class ReplyController {
     private final ReplyService replyService; // 생성자 주입
 
     @PostMapping("")

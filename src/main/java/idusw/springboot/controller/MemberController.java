@@ -89,7 +89,7 @@ public class MemberController {
         return "/members/register";
     }
 
-    @PostMapping("/")
+    @PostMapping("/register")
     public String createMember(@ModelAttribute("member") Member member, Model model) { // 등록 처리 -> service -> repository -> service -> controller
         if(memberService.create(member) > 0 ) // 정상적으로 레코드의 변화가 발생하는 경우 영향받는 레코드 수를 반환
             return "redirect:/";
@@ -134,5 +134,14 @@ public class MemberController {
     @PostMapping("/forgot") // create vs  update -> @PutMapping, delete -> @DeleteMapping
     public String forgotMemberPassword() { // 비밀번호(갱신) -> service -> repository -> service -> controller
         return "redirect:/"; // 루트로 이동
+    }
+
+    @PostMapping("/check-email")
+    @ResponseBody
+    public int checkEmail(@RequestParam("email") String email) {
+        Member member = Member.builder().email(email).build();
+        int cnt = memberService.checkEmail(member);
+        System.out.println("check-email" + email + " : " + cnt);
+        return cnt; // 1 :  중복, 0 : 사용가능
     }
 }

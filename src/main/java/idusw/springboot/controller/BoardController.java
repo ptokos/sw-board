@@ -3,6 +3,8 @@ package idusw.springboot.controller;
 import idusw.springboot.domain.Board;
 import idusw.springboot.domain.Member;
 import idusw.springboot.domain.PageRequestDTO;
+import idusw.springboot.domain.PageResultDTO;
+import idusw.springboot.entity.MemberEntity;
 import idusw.springboot.service.BoardService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -44,7 +46,7 @@ public class BoardController {
         if (boardService.registerBoard(board) > 0) // 정상적으로 레코드의 변화가 발생하는 경우 영향받는 레코드 수를 반환
             return "redirect:/boards";
         else
-            return "errors/404"; // 게시물 등록 예외 처리
+            return "/errors/404"; // 게시물 등록 예외 처리
     }
 
     @PostMapping("")
@@ -66,6 +68,7 @@ public class BoardController {
 
     @GetMapping("")
     public String getBoards(PageRequestDTO pageRequestDTO, Model model) {  // 중간 본 수정
+
         model.addAttribute("list", boardService.findBoardAll(pageRequestDTO));
         return "/boards/list";
     }
@@ -75,7 +78,7 @@ public class BoardController {
         // Long bno 값을 사용하는 방식을 Board 객체에 bno를 설정하여 사용하는 방식으로 변경
         Board board = boardService.findBoardById(Board.builder().bno(bno).build());
         boardService.updateBoard(board);
-        model.addAttribute("dto", boardService.findBoardById(board));
+        model.addAttribute("board", board);
         return "/boards/detail";
     }
 

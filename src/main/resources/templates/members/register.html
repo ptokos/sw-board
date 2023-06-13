@@ -30,14 +30,42 @@
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
                             </div>
+                            <script>
+                                function checkEmail(){
+                                    var email = $('#exampleInputEmail').val(); //email 항목(id="exampleInputEmail")인 입력란의 값을 저장
+                                    $.ajax({
+                                        url:'/members/check-email', //Controller에서 요청 받을 주소
+                                        type:'post', //POST 방식으로 전달
+                                        data:{email:email},
+                                        success:function(cnt) { //컨트롤러에서 넘어온 cnt값을 응답으로 받음
+                                            if (cnt == 0) { //cnt가 0인 경우 사용 가능
+                                                $('.email_ok').css("display","inline-block");
+                                                $('.email_already').css("display", "none");
+                                            } else { //cnt가 0이 아닌 경우 중복
+                                                $('.email_already').css("display","inline-block");
+                                                $('.email_ok').css("display","none");
+                                                //$('#exampleInputEmail').val(''); //다시 입력
+                                            }
+                                        },
+                                        error:function(){
+                                            alert("에러입니다");
+                                        }
+                                    });
+                                };
+                            </script>
+
                             <form class="user" th:action="@{'/members/register'}" th:object="${member}" th:method="post">
+                                <div class="form-group">
+                                    <input type="email" name="email" th:field="*{email}" class="form-control form-control-user" id="exampleInputEmail"
+                                           placeholder="Email Address" oninput="checkEmail();">
+                                </div>
+                                <div class="col-sm-6">
+                                    <span class="email_ok">ok: 사용 가능</span>
+                                    <span class="email_already">check: 사용 불가능</span>
+                                </div>
                                 <div class="form-group row">
                                     <input type="text" name="name" th:field="*{name}" class="form-control form-control-user" id="exampleFirstName"
                                             placeholder=" Name">
-                                </div>
-                                <div class="form-group">
-                                    <input type="email" name="email" th:field="*{email}" class="form-control form-control-user" id="exampleInputEmail"
-                                        placeholder="Email Address">
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
@@ -63,7 +91,7 @@
                                 <a class="small" href="forgot-password.html">Forgot Password?</a>
                             </div>
                             <div class="text-center">
-                                <a class="small" href="login.html">Already have an account? Login!</a>
+                                <a class="small" href="/members/login-form">Already have an account? Login!</a>
                             </div>
                         </div>
                     </div>

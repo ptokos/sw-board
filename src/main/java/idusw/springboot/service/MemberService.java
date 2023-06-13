@@ -16,9 +16,10 @@ public interface MemberService {
     int update(Member m);
     int delete(Member m);
 
-    Member login(Member m);
+    Member login(Member m);  // email and pw
+    int checkEmail(Member m); // email
 
-    // java 1.8 부터
+    // java 1.8 부터 : 인터페이스가 기본 메소드를 가질 수 있도록 함
     PageResultDTO<Member, MemberEntity> getList(PageRequestDTO pageRequestDTO);
 
     default MemberEntity dtoToEntity(Member dto) { // dto객체를 entity 객체로 변환 : service -> repository

@@ -35,6 +35,12 @@ public class MemberServiceImpl implements MemberService {
                 .name(m.getName())
                 .pw(m.getPw())
                 .build();
+        // memberRepository에서  findByEmail을 해서 결과가 있으면, 중복 => 실패
+        // 결과가 없으면 성공
+//        if (memberRepository.findByEmail(entity.getEmail()) != null) {
+//            System.out.println("중복 이메일로 저장 실패");
+//            return 0;
+//        }
         if(memberRepository.save(entity) != null) // 저장 성공
             return 1;
         else
@@ -108,6 +114,15 @@ public class MemberServiceImpl implements MemberService {
             result.setName(e.getName());
         }
         return result;
+    }
+
+    @Override
+    public int checkEmail(Member m) {
+        List<MemberEntity> memberEntityList = memberRepository.getMemberEntitiesByEmail(m.getEmail());
+        if(memberEntityList.size() > 0)
+            return 1; // email 중복
+        else
+            return 0; // 사용가능
     }
 
     @Override
