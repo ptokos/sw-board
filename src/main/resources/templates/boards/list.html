@@ -73,7 +73,11 @@
                             <h2 class="card-title h4"><span th:text="${board.title}" ></span></h2>
                             <p class="card-text"><span th:text="${board.content}" ></span></p>
                             <p class="card-text">댓글 수 : <span th:text="${board.replyCount}" ></span></p>
+                            <p class="card-text">좋아요 수 : <span th:text="${board.likeCount}" ></span></p>
                             <a class="btn btn-primary" th:href="@{'/boards/' + ${board.bno}}">Read more →</a>
+                            <form th:action="@{'/boards/' + ${board.bno} + '/like'}" method="post">
+                                <button type="submit" class="btn btn-primary">이 게시글 좋아요</button>
+                            </form>
                         </div>
                     </div>
                 </div>

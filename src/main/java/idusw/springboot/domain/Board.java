@@ -27,4 +27,6 @@ public class Board {
     private LocalDateTime modDate;
 
     private Long replyCount; // JPA에서 count() 함수로 값을 채움
+
+    private Long likeCount;
 }

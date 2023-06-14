@@ -23,6 +23,10 @@ public class BoardEntity extends BaseEntity {
     @Column(length = 1000, nullable = false)
     private String content; // 내용
 
+    @Column(name = "like_count")
+    private Integer likeCount = 0; // 좋아요 수
+
+
     @ManyToOne
     //@JoinColumn(name = "seq")
     private MemberEntity writer; // BoardEntity : MemberEntity = N : 1

@@ -109,4 +109,12 @@ public class BoardController {
         model.addAttribute(board);
         return "redirect:/boards";
     }
+
+    @PostMapping("/{bno}/like")
+    public String likeBoard(@PathVariable("bno") Long bno, Model model) {
+        Board board = boardService.findBoardById(Board.builder().bno(bno).build());
+        boardService.likeBoard(board); // 좋아요 수를 업데이트하는 서비스 메서드 호출
+        return "redirect:/boards";
+    }
+
 }

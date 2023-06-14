@@ -46,4 +46,7 @@ public interface BoardService {
                 .build();
         return dto;
     }
+
+    int likeBoard(Board board);
+
 }

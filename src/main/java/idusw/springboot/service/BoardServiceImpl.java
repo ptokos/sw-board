@@ -66,4 +66,22 @@ public class BoardServiceImpl implements BoardService {
 
         return 0;
     }
+
+    @Override
+    @Transactional
+    public int likeBoard(Board board) {
+        Long bno = board.getBno();
+        BoardEntity boardEntity = boardRepository.findById(bno).orElse(null);
+        if (boardEntity != null) {
+            Integer likeCount = boardEntity.getLikeCount() != null ? boardEntity.getLikeCount() : 0;
+            boardRepository.setLikeCount(bno, likeCount + 1);
+
+            return 1; // 좋아요 수 업데이트 성공
+        }
+
+        return 0; // 게시물을 찾지 못함
+    }
+
+
+
 }
