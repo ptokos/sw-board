@@ -72,6 +72,7 @@
                             <div class="small text-muted"><span th:text="${board.regDate}" ></span></div>
                             <h2 class="card-title h4"><span th:text="${board.title}" ></span></h2>
                             <p class="card-text"><span th:text="${board.content}" ></span></p>
+                            <p class="card-text">댓글 수 : <span th:text="${board.replyCount}" ></span></p>
                             <a class="btn btn-primary" th:href="@{'/boards/' + ${board.bno}}">Read more →</a>
                         </div>
                     </div>
