@@ -4,6 +4,7 @@ import idusw.springboot.domain.Board;
 import idusw.springboot.domain.Member;
 import idusw.springboot.domain.PageRequestDTO;
 import idusw.springboot.domain.PageResultDTO;
+import idusw.springboot.entity.BoardEntity;
 import idusw.springboot.entity.MemberEntity;
 import idusw.springboot.service.BoardService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -113,8 +114,9 @@ public class BoardController {
     @PostMapping("/{bno}/like")
     public String likeBoard(@PathVariable("bno") Long bno, Model model) {
         Board board = boardService.findBoardById(Board.builder().bno(bno).build());
-        boardService.likeBoard(board); // 좋아요 수를 업데이트하는 서비스 메서드 호출
+       boardService.likeBoard(board);
         return "redirect:/boards";
     }
+
 
 }
