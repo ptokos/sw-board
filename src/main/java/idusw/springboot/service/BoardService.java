@@ -43,6 +43,7 @@ public interface BoardService {
                 .modDate(entity.getModDate())
                 //reply entity
                 .replyCount(replyCount)
+                .likeCount(Long.valueOf(entity.getLikeCount()))
                 .build();
         return dto;
     }

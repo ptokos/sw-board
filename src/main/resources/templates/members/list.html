@@ -17,6 +17,55 @@
     <!-- Custom styles for this page -->
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
+<script>
+    function sortTable(columnName) {
+    let table, rows, switching, i, x, y, shouldSwitch;
+    table = document.getElementById("dataTable");
+    switching = true;
+
+    // Set the sorting direction to ascending
+    let ascending = true;
+
+    while (switching) {
+    switching = false;
+    rows = table.getElementsByTagName("tr");
+
+    // Find the index of the column with columnName as the title
+    const columnIndex = Array.from(rows[0].getElementsByTagName("th")).findIndex(th => th.innerText.toLowerCase() === columnName);
+
+    for (i = 1; i < (rows.length - 1); i++) {
+    shouldSwitch = false;
+
+    // Get the two elements to be compared
+    x = rows[i].getElementsByTagName("td")[columnIndex].innerText.toLowerCase();
+    y = rows[i + 1].getElementsByTagName("td")[columnIndex].innerText.toLowerCase();
+
+    // Check if the two rows should switch places
+    if (ascending) {
+    if (x > y) {
+    shouldSwitch = true;
+    break;
+    }
+    } else {
+    if (x < y) {
+    shouldSwitch = true;
+    break;
+    }
+    }
+    }
+
+    if (shouldSwitch) {
+    // Switch the rows and set the switching flag to true
+    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+    switching = true;
+    }
+
+    // Reverse the sorting direction
+    ascending = !ascending;
+    }
+    }
+</script>
+
 </head>
 
 <body id="page-top">
@@ -173,7 +222,7 @@
                                         <div class="col-sm-12 col-md-6">
                                             <div class="dataTables_length" id="dataTable_length">
                                                 <label>검색 요건
-                                                    <select name="type" aria-controls="dataTable" class="custom-select custom-select-sm form-control form-control-sm">
+                                                    <select name="type" aria-controls="dataTable" class="custom-select custom-select-sm form-control form-control-sm" onchange="sortTable(this.value)">
                                                         <option value="e">email</option>
                                                         <option value="n">name</option>
                                                         <option value="en">email+name</option>
@@ -189,17 +238,20 @@
                                                 <button type="submit" class="btn btn-default">
                                                     <i class="fas fa-search"></i>
                                                 </button>
+                                                <button type="button" class="btn btn-primary" onClick="sortTable('phone')">Sort by Phone</button>
                                             </div>
                                         </div>
                                     </div>
                                 </form>
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
                                             <th>번호</th>
                                             <th>이메일</th>
                                             <th>이름</th>
                                             <th>암호</th>
+                                            <th>핸드폰</th>
+                                            <th>주소</th>
                                             <th>등록일</th>
                                             <th>수정일</th>
                                         </tr>
@@ -210,6 +262,8 @@
                                             <th>이메일</th>
                                             <th>이름</th>
                                             <th>암호</th>
+                                            <th>핸드폰</th>
+                                            <th>주소</th>
                                             <th>등록일</th>
                                             <th>수정일</th>
                                         </tr>
@@ -221,6 +275,8 @@
                                             <td>[[${member.email}]]</td>
                                             <td>[[${member.name}]]</td>
                                             <td>[[${member.pw}]]</td>
+                                            <td>[[${member.phone}]]</td>
+                                            <td>[[${member.address}]]</td>
                                             <td>[[${member.regDate}]]</td>
                                             <td>[[${member.modDate}]]</td>
                                         </tr>

@@ -54,13 +54,15 @@ public class MemberControllerTests {
 
     @Test
     void initializeMember() {
-        // Integer 데이터 흐름, Lambda 식 - 함수형 언어의 특징을 활용
         IntStream.rangeClosed(1, 100).forEach(i -> {
+            String phoneNumber = String.format("010-%04d-%04d", i, i);
             MemberEntity member = MemberEntity.builder()
                     .seq(Long.valueOf(i))
-                    .email("e" + i + "@induk.ac.kr") // 17039
+                    .email("e" + i + "@induk.ac.kr")
                     .pw("pw" + i)
                     .name("name" + i)
+                    .phone(phoneNumber)
+                    .address("창동" + i)
                     .build();
             memberRepository.save(member);
         });

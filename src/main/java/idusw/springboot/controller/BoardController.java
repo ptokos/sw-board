@@ -71,6 +71,7 @@ public class BoardController {
     public String getBoards(PageRequestDTO pageRequestDTO, Model model) {  // 중간 본 수정
 
         model.addAttribute("list", boardService.findBoardAll(pageRequestDTO));
+
         return "/boards/list";
     }
 
@@ -114,7 +115,10 @@ public class BoardController {
     @PostMapping("/{bno}/like")
     public String likeBoard(@PathVariable("bno") Long bno, Model model) {
         Board board = boardService.findBoardById(Board.builder().bno(bno).build());
-       boardService.likeBoard(board);
+        boardService.likeBoard(board);
+        model.addAttribute("board", board);
+
+
         return "redirect:/boards";
     }
 

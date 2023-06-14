@@ -18,6 +18,8 @@ public class Member {
     private String email;
     private String name;
     private String pw;
+    private String phone;
+    private String address;
 
     private LocalDateTime regDate;
     private LocalDateTime modDate;

@@ -144,4 +144,13 @@ public class MemberController {
         System.out.println("check-email" + email + " : " + cnt);
         return cnt; // 1 :  중복, 0 : 사용가능
     }
+
+    // 관리자 여부 확인 메서드
+    private boolean isAdmin(Member member) {
+        // 예를 들어, member 객체의 특정 필드를 확인하여 관리자인지 여부를 판단할 수 있습니다.
+        // 판단 로직을 구현하여 true 또는 false를 반환하도록 작성합니다.
+        // 이 예시에서는 member.getEmail()이 "admin@example.com"인 경우에만 관리자로 간주하도록 설정합니다.
+        session.setAttribute("user", member);
+        return "201712039@induck.ac.kr".equals(member.getEmail());
+    }
 }
